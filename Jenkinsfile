@@ -27,13 +27,13 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                bat '"C:\\Users\\nikhi\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" compose build'
+                bat 'set "DOCKER_CONFIG=C:\\Users\\nikhi\\.docker" && "C:\\Users\\nikhi\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" compose build'
             }
         }
 
         stage('Docker Compose Up') {
             steps {
-                bat '"C:\\Users\\nikhi\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" compose up -d'
+                bat 'set "DOCKER_CONFIG=C:\\Users\\nikhi\\.docker" && "C:\\Users\\nikhi\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" compose up -d'
             }
         }
     }
