@@ -8,6 +8,7 @@ import os
 import re
 import uuid
 from dotenv import load_dotenv
+cache={}
 
 load_dotenv()
 
@@ -49,8 +50,6 @@ class QueryResponse(BaseModel):
     keywords: list
     similar_queries: list
     query_results: dict
-
-# ─── Keyword Extractor ────────────────────────────────────
 def extract_keywords(query: str) -> list:
     stop_words = {
         'show', 'me', 'all', 'the', 'find', 'get', 'list', 'give',
@@ -61,8 +60,6 @@ def extract_keywords(query: str) -> list:
     words = re.findall(r'\b[a-zA-Z0-9]+\b', query.lower())
     keywords = [w for w in words if w not in stop_words and len(w) > 2]
     return list(set(keywords))
-
-# ─── Unique Value Fetcher ─────────────────────────────────
 def get_unique_values(keywords: list) -> dict:
     db_values = {
         "city": ["Delhi", "Mumbai", "Hyderabad", "Chennai", "Bangalore"],
@@ -76,7 +73,6 @@ def get_unique_values(keywords: list) -> dict:
                 relevant[column] = values
     return relevant
 
-# ─── Vector Search ────────────────────────────────────────
 def store_query_in_pinecone(query: str, sql: str):
     try:
         embedding = pc.inference.embed(
@@ -99,7 +95,6 @@ def store_query_in_pinecone(query: str, sql: str):
         print(f"✅ Stored in Pinecone")
     except Exception as e:
         print(f"⚠️ Pinecone upsert error: {e}")
-
 def find_similar_queries(query: str) -> list:
     try:
         embedding = pc.inference.embed(
@@ -203,7 +198,7 @@ SQL Query:"""
                 {"role": "system", "content": "You are a SQL expert. Generate only SQL queries."},
                 {"role": "user",   "content": prompt}
             ],
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-20b",
             temperature=0.1,
             max_tokens=500
         )
@@ -228,7 +223,7 @@ SQL Query:"""
             success=True,
             natural_language_query=request.query,
             generated_sql=generated_sql,
-            model_used="llama-3.3-70b-versatile",
+            model_used="openai/gpt-oss-20b",
             keywords=keywords,
             similar_queries=similar_queries,
             query_results=sql_results
