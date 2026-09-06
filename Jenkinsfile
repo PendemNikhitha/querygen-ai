@@ -32,10 +32,17 @@ pipeline {
         }
 
         stage('Docker Compose Up') {
-            steps {
-                bat 'set "PATH=C:\\Users\\nikhi\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin;%PATH%" && set "DOCKER_HOST=tcp://localhost:2375" && set "DOCKER_CONFIG=C:\\Users\\nikhi\\.docker" && "C:\\Users\\nikhi\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" compose up -d'
-            }
+    steps {
+        withCredentials([
+            string(credentialsId: 'mongo-uri', variable: 'MONGO_URI'),
+            string(credentialsId: 'JWT_SECRET', variable: 'JWT_SECRET'),
+            string(credentialsId: 'PINECONE_API_KEY', variable: 'PINECONE_API_KEY'),
+            string(credentialsId: 'GROQ_API_KEY', variable: 'GROQ_API_KEY')
+        ]) {
+            bat 'set "PATH=C:\\Users\\nikhi\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin;%PATH%" && set "DOCKER_HOST=tcp://localhost:2375" && set "DOCKER_CONFIG=C:\\Users\\nikhi\\.docker" && "C:\\Users\\nikhi\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" compose up -d'
         }
+    }
+}
     }
 
     post {
