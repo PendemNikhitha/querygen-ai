@@ -27,13 +27,13 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                bat 'set "DOCKER_HOST=tcp://localhost:2375" && set "DOCKER_CONFIG=C:\\Users\\nikhi\\.docker" && set "COMPOSE_HTTP_TIMEOUT=200" && "C:\\Users\\nikhi\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" compose build'
+                bat 'set "PATH=C:\\Users\\nikhi\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin;%PATH%" && set "DOCKER_HOST=tcp://localhost:2375" && set "DOCKER_CONFIG=C:\\Users\\nikhi\\.docker" && set "COMPOSE_HTTP_TIMEOUT=200" && "C:\\Users\\nikhi\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" compose build'
             }
         }
 
         stage('Docker Compose Up') {
             steps {
-                bat 'set "DOCKER_HOST=tcp://localhost:2375" && set "DOCKER_CONFIG=C:\\Users\\nikhi\\.docker" && "C:\\Users\\nikhi\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" compose up -d'
+                bat 'set "PATH=C:\\Users\\nikhi\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin;%PATH%" && set "DOCKER_HOST=tcp://localhost:2375" && set "DOCKER_CONFIG=C:\\Users\\nikhi\\.docker" && "C:\\Users\\nikhi\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" compose up -d'
             }
         }
     }
