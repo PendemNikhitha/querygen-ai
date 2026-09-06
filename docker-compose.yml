@@ -20,12 +20,15 @@ services:
       - "host.docker.internal:host-gateway"
     depends_on:
       - ai-service
+
   ai-service:
     build: ./ai-service
     ports:
       - "8000:8000"
     environment:
       - PINECONE_API_KEY=${PINECONE_API_KEY}
+      - PINECONE_INDEX=${PINECONE_INDEX}
+      - PINECONE_HOST=${PINECONE_HOST}
       - GROQ_API_KEY=${GROQ_API_KEY}
     volumes:
       - ./ai-service/database.db:/app/database.db
